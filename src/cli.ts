@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { parseArgs } from "node:util";
 import { runAudit } from "./audit.js";
@@ -13,6 +14,7 @@ Usage: keypeek [options]
   --no-history        skip shell history files
   --json              machine-readable output
   --fail-on <level>   exit 1 if a finding at this severity or above exists (low|medium|high)
+  -v, --version
   -h, --help
 `;
 
@@ -26,9 +28,12 @@ async function main(): Promise<number> {
       json: { type: "boolean" },
       "fail-on": { type: "string" },
       help: { type: "boolean", short: "h" },
+      version: { type: "boolean", short: "v" },
     },
   });
   if (values.help) return console.log(HELP), 0;
+  // dist/src/cli.js -> package root is two levels up
+  if (values.version) return console.log(JSON.parse(readFileSync(new URL("../../package.json", import.meta.url), "utf8")).version), 0;
   const failOn = values["fail-on"] as Severity | undefined;
   if (failOn && !(failOn in RANK)) return console.error(`--fail-on must be low, medium or high`), 2;
 
