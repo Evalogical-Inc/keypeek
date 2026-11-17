@@ -36,10 +36,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vinueva0012/keypeek.git"
+    "url": "git+https://github.com/Evalogical-Inc/keypeek.git"
   },
-  "homepage": "https://github.com/vinueva0012/keypeek#readme",
+  "homepage": "https://github.com/Evalogical-Inc/keypeek#readme",
   "bugs": {
-    "url": "https://github.com/vinueva0012/keypeek/issues"
+    "url": "https://github.com/Evalogical-Inc/keypeek/issues"
   }
 }
