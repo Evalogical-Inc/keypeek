@@ -5,7 +5,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com). Versions follow s
 ## [Unreleased]
 
 ### Added
-- `--version` flag.
+- `--version` and `--all` flags.
+- Terminal report: score bar, severity summary, aligned columns, `~` paths, width-aware truncation, per-section row cap and next steps.
 - Runbook, contributing guide, security policy, CI on Ubuntu and macOS (Node 20 and 22).
 
 ### Fixed

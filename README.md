@@ -21,31 +21,40 @@ npx keypeek
 
 ## Example
 
-Output from a throwaway demo home folder with fake keys:
+Output from a throwaway demo home folder with fake keys (in a real terminal it is colored):
 
 ```
-keypeek  what your AI agents can see (read-only, nothing leaves this machine)
+keypeek  what your AI agents can see. Read-only, nothing leaves this machine.
 
-Score: 50/100  Grade: D
+Score  ██████████░░░░░░░░░░  50/100  grade D
+5 findings: 2 high · 3 medium · 0 low
 
-transcript (1)  Agent transcripts: the key was already in a model's context. Rotate it.
-  high   Anthropic              sk-a…(39)  #1b72678c  x3  /home/dev/.claude/projects/app/session.jsonl:1
+Agent transcripts (1)  already in a model's context, rotate these
+  SEV    TYPE                   VALUE        SEEN   LOCATION
+  high   Anthropic              sk-a…(39)    x3     ~/.claude/projects/app/session.jsonl:1
 
-history (1)  Shell history: any agent with shell access can read this file.
-  high   AWS                    AKIA…(20)  #457643f4  x1  /home/dev/.zsh_history:1
+Shell history (1)  any agent with shell access can read it
+  SEV    TYPE                   VALUE        SEEN   LOCATION
+  high   AWS                    AKIA…(20)    x1     ~/.zsh_history:1
 
-envfile (3)  .env files: agents can read these by default.
-  medium generic:JWT_SECRET     Xk9m…(20)  #d5d7561c  x1  /home/dev/work/blog/.env:1
-  medium OpenAI                 sk-a…(37)  #021aee52  x1  /home/dev/work/shop-api/.env:1
-  medium Stripe                 sk_l…(40)  #2144f233  x1  /home/dev/work/shop-api/.env:2
+.env files (3)  agents read these by default
+  SEV    TYPE                   VALUE        SEEN   LOCATION
+  medium JWT_SECRET             Xk9m…(20)    x1     ~/work/blog/.env:1
+  medium OpenAI                 sk-a…(37)    x1     ~/work/shop-api/.env:1
+  medium Stripe                 sk_l…(40)    x1     ~/work/shop-api/.env:2
 
 Agent config
-  ?    Claude Code settings: No settings.json found; Claude Code defaults apply.
+  ? Claude Code settings: No settings.json found; Claude Code defaults apply.
 
-Values are never printed: only a 4-char prefix, length and a hash fingerprint.
+Next steps
+  1. Rotate anything under transcripts or shell history first. It has already been exposed.
+  2. Move secrets out of project .env files into a secrets manager or the OS keychain.
+  3. Add a deny rule for .env in your agent's settings, then run keypeek again.
+
+Values are never printed: only a 4-char prefix, the length and a hash fingerprint (#hash in --json).
 ```
 
-Each row reads: severity, provider or rule, redacted preview `prefix…(length)`, fingerprint `#hash`, how many times it appeared (`x3`), and where.
+Each row reads: severity, type (provider or rule), redacted value `prefix…(length)`, how many times it appeared (`x3`), and where. Long lists show the top rows per section; use `--all` for everything. `--json` also includes a hash fingerprint per finding so you can track a key without seeing it.
 
 ## What it checks
 
@@ -68,6 +77,7 @@ keypeek [options]
 
   --path <dir>        directory to scan for .env files (repeatable, default: home)
   --no-history        skip shell history files
+  --all               show every finding (default: top rows per section)
   --json              machine-readable output
   --fail-on <level>   exit 1 if a finding at this severity or above exists (low|medium|high)
   -v, --version

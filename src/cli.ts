@@ -12,6 +12,7 @@ Read-only. No network. Secret values are never printed.
 Usage: keypeek [options]
   --path <dir>        directory to scan for .env files (repeatable, default: home)
   --no-history        skip shell history files
+  --all               show every finding (default: top rows per section)
   --json              machine-readable output
   --fail-on <level>   exit 1 if a finding at this severity or above exists (low|medium|high)
   -v, --version
@@ -25,6 +26,7 @@ async function main(): Promise<number> {
     options: {
       path: { type: "string", multiple: true },
       "no-history": { type: "boolean" },
+      all: { type: "boolean" },
       json: { type: "boolean" },
       "fail-on": { type: "string" },
       help: { type: "boolean", short: "h" },
@@ -39,7 +41,7 @@ async function main(): Promise<number> {
 
   const home = homedir();
   const result = await runAudit({ home, roots: values.path ?? [home], cwd: process.cwd(), history: !values["no-history"], env: process.env });
-  console.log(values.json ? JSON.stringify(result, null, 2) : renderReport(result));
+  console.log(values.json ? JSON.stringify(result, null, 2) : renderReport(result, { all: values.all }));
   return failOn && result.findings.some((f) => RANK[f.severity] >= RANK[failOn]) ? 1 : 0;
 }
 

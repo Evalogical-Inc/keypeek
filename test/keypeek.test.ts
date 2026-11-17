@@ -81,3 +81,11 @@ test("score caps each surface so many findings do not zero it", async () => {
   const many = Array.from({ length: 50 }, (_, i) => f(i));
   assert.equal(score(many, []).score, 80); // envfile capped at 20
 });
+
+test("report fits the terminal width and keeps filenames visible", async () => {
+  const { home } = fixture();
+  const r = await runAudit({ home, roots: [home], cwd: home, history: true, env: {} });
+  const text = renderReport(r, { cols: 80, color: false, home });
+  for (const line of text.split("\n")) assert.ok(line.length <= 100, `line too wide: ${line.length}`);
+  assert.ok(text.includes("~/.zsh_history") && text.includes("Next steps"));
+});
