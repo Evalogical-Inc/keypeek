@@ -1,5 +1,5 @@
 {
-  "name": "keypeek",
+  "name": "@evalogical/keypeek",
   "version": "0.1.0",
   "description": "See which secrets your AI coding agents can read. Read-only, local, no network.",
   "type": "module",
@@ -42,5 +42,8 @@
   "bugs": {
     "url": "https://github.com/Evalogical-Inc/keypeek/issues"
   },
-  "author": "Evalogical"
+  "author": "Evalogical",
+  "publishConfig": {
+    "access": "public"
+  }
 }

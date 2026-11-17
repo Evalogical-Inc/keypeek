@@ -5,6 +5,7 @@
 [![ci](https://github.com/Evalogical-Inc/keypeek/actions/workflows/ci.yml/badge.svg)](https://github.com/Evalogical-Inc/keypeek/actions/workflows/ci.yml)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![node >=20](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
+[![npm](https://img.shields.io/npm/v/@evalogical/keypeek)](https://www.npmjs.com/package/@evalogical/keypeek)
 ![dependencies: 0](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen)
 
 Claude Code, Cursor, Codex and friends read your `.env` files, keep full transcripts on disk, and hand your shell environment to every command they run. keypeek looks at those places, tells you what is exposed, and gives you a score.
@@ -14,10 +15,15 @@ Claude Code, Cursor, Codex and friends read your `.env` files, keep full transcr
 - **Safe to run.** It never prints a secret: only a 4-character prefix, the length, and a hash fingerprint.
 
 ```
-npx keypeek
+npx @evalogical/keypeek
 ```
 
-> Not published to npm yet. Until then: clone, `npm install && npm test`, then `node dist/src/cli.js`.
+Or install it once and run `keypeek`:
+
+```
+npm install -g @evalogical/keypeek
+keypeek
+```
 
 ## Example
 

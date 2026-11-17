@@ -37,10 +37,10 @@ Same as above, in reverse. If the format is a new provider, add a pattern. If it
 1. `npm test` passes on `main` and CI is green.
 2. Bump `version` in `package.json` (semver; new provider patterns = minor).
 3. `git tag vX.Y.Z && git push --tags`.
-4. `npm publish` (`prepublishOnly` runs the tests). Check `npm pack --dry-run` lists only `dist/src`, README, LICENSE.
+4. `npm publish` (`prepublishOnly` runs the tests; `publishConfig` already sets public access). Check `npm pack --dry-run` lists only `dist/src`, README, LICENSE.
 5. Create a GitHub release with notes: new patterns, behavior changes, known limits.
 
-Before the first publish: confirm the npm name `keypeek` is still free (`npm view keypeek`).
+Published as `@evalogical/keypeek` (public, under the `evalogical` npm org). The installed command is `keypeek`. Publishing needs an npm account that is a member of the org, and may ask for a one-time 2FA code (`npm publish --otp=<code>`).
 
 ## Security reports
 See `SECURITY.md`. A bug that prints, writes or transmits a secret is severity high: fix, release and publish an advisory.
