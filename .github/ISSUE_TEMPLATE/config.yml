@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a question or share an idea
+    url: https://github.com/Evalogical-Inc/keypeek/discussions
+    about: Questions, ideas and show-and-tell belong in Discussions.
+  - name: Report a security problem privately
+    url: https://github.com/Evalogical-Inc/keypeek/security/advisories/new
+    about: If keypeek ever printed, wrote or sent a full secret, report it here, not in a public issue.
