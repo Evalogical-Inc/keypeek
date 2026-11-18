@@ -40,7 +40,11 @@ async function main(): Promise<number> {
   if (failOn && !(failOn in RANK)) return console.error(`--fail-on must be low, medium or high`), 2;
 
   const home = homedir();
+  // Status goes to stderr, only on a terminal, so --json and piped output stay clean.
+  const live = Boolean(process.stderr.isTTY) && !values.json;
+  if (live) process.stderr.write("keypeek: scanning, this can take a few seconds…");
   const result = await runAudit({ home, roots: values.path ?? [home], cwd: process.cwd(), history: !values["no-history"], env: process.env });
+  if (live) process.stderr.write("\r\x1b[2K");
   console.log(values.json ? JSON.stringify(result, null, 2) : renderReport(result, { all: values.all }));
   return failOn && result.findings.some((f) => RANK[f.severity] >= RANK[failOn]) ? 1 : 0;
 }
