@@ -2,19 +2,39 @@
 
 # keypeek
 
-**See which secrets your AI coding agents can read.**
+**See which secrets your AI coding agents can read.** One command, a few seconds, nothing changed, nothing shown.
 
 [![ci](https://github.com/Evalogical-Inc/keypeek/actions/workflows/ci.yml/badge.svg)](https://github.com/Evalogical-Inc/keypeek/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@evalogical/keypeek)](https://www.npmjs.com/package/@evalogical/keypeek)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![node >=20](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
-[![npm](https://img.shields.io/npm/v/@evalogical/keypeek)](https://www.npmjs.com/package/@evalogical/keypeek)
-![dependencies: 0](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen)
+![runtime dependencies: 0](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen)
 
-Claude Code, Cursor, Codex and friends read your `.env` files, keep full transcripts on disk, and hand your shell environment to every command they run. keypeek looks at those places, tells you what is exposed, and gives you a score.
+```
+npx @evalogical/keypeek
+```
+
+<!-- DEMO GIF GOES HERE.
+     Record: scripts/demo-home.sh /tmp/keypeek-demo-home && npm run build && KEYPEEK_REPO=$PWD vhs docs/demo.tape
+     Then replace this whole comment with:
+<p align="center"><img src="https://raw.githubusercontent.com/Evalogical-Inc/keypeek/main/docs/keypeek-demo.gif" alt="keypeek scanning a demo home folder" width="800"></p>
+-->
+
+## Why keypeek exists
+
+You hand an AI coding agent your project. It reads your files, runs your commands, and keeps a full transcript of everything it saw. Most developers never check what that adds up to.
+
+Keys end up in places you do not think about: old `.env` files, shell history, and pasted into agent chats. Nobody did anything wrong. It is what a normal week of building with AI looks like.
+
+Secret scanners look at git history. Secrets managers keep new secrets out of reach. Neither answers the question you actually have today: *what can my AI agents see on this machine right now?*
+
+keypeek answers that in a few seconds, without changing anything, and without ever showing you a secret.
 
 - **Read-only.** It never writes, moves or deletes anything.
 - **Local.** No network, no telemetry, zero runtime dependencies.
 - **Safe to run.** It never prints a secret: only a 4-character prefix, the length, and a hash fingerprint.
+
+## Quick start
 
 ```
 npx @evalogical/keypeek
@@ -27,11 +47,7 @@ npm install -g @evalogical/keypeek
 keypeek
 ```
 
-<!-- DEMO GIF GOES HERE.
-     Record: scripts/demo-home.sh /tmp/keypeek-demo-home && npm run build && KEYPEEK_REPO=$PWD vhs docs/demo.tape
-     Then replace this whole comment with:
-<p align="center"><img src="https://raw.githubusercontent.com/Evalogical-Inc/keypeek/main/docs/keypeek-demo.gif" alt="keypeek scanning a demo home folder" width="800"></p>
--->
+Needs Node 20 or newer. macOS and Linux. A Homebrew install is [planned](https://github.com/Evalogical-Inc/keypeek/issues/8).
 
 ## Example
 
@@ -70,21 +86,12 @@ Values are never printed: only a 4-char prefix, the length and a hash fingerprin
 
 Each row reads: severity, type (provider or rule), redacted value `prefix…(length)`, how many times it appeared (`x3`), and where. Long lists show the top rows per section; use `--all` for everything. `--json` also includes a hash fingerprint per finding so you can track a key without seeing it.
 
-## Who it's for
+## How it works
 
-- **Vibe coders and solo builders** who let Claude Code, Cursor or Codex run in their projects and want to know what those tools can reach.
-- **Developers with a messy home folder:** old `.env` files, keys pasted into shell history, keys pasted into chats.
-- **Small teams and agencies** that want a quick check before handing a laptop or repo to an AI agent.
-
-## Why keypeek
-
-| | |
-|---|---|
-| **Looks where agents look** | Agent transcripts, shell history, `.env` files and inherited environment variables, not just git history. |
-| **Ranked by exposure** | A key already in a transcript is worse than a key in an unused `.env`. The score reflects that. |
-| **Safe to run** | Read-only, no network, no telemetry, never prints a full secret. Tests enforce all three. |
-| **Zero dependencies** | Node built-ins only, so there is little to audit. |
-| **CI friendly** | `--json` output and `--fail-on` exit codes. |
+1. **Find.** It looks in the places agents look: transcripts, shell history, `.env` files and the environment of your shell.
+2. **Match.** Known key formats plus a conservative rule for `NAME=value` pairs with high-entropy values.
+3. **Rank.** A key already in a transcript counts for more than a key in an unused `.env`. The score is capped per surface so one noisy folder cannot hide progress elsewhere.
+4. **Redact.** Only a 4-character prefix, the length and a hash fingerprint leave the scanner. The full value is never stored in a result.
 
 ## What it checks
 
@@ -96,9 +103,9 @@ Each row reads: severity, type (provider or rule), redacted value `prefix…(len
 | procenv | environment variables of the shell that runs keypeek | low | Inherited by every subprocess an agent starts. |
 | config | Claude Code `settings.json` | | Is `.env` denied? Is subprocess env scrubbing set? |
 
-Detected formats: Anthropic, OpenAI, GitHub, AWS access keys, Stripe, Google API keys, Slack, Hugging Face, JWTs, private-key headers, plus a conservative `NAME=value` rule for names containing KEY, TOKEN, SECRET or PASSWORD with a high-entropy value.
+Detected formats: Anthropic, OpenAI, GitHub, AWS access keys, Stripe, Google API keys, Slack, Hugging Face, JWTs, private-key headers, plus the generic rule for names containing KEY, TOKEN, SECRET or PASSWORD.
 
-The score starts at 100 and loses points per finding, capped per surface so one noisy folder cannot hide progress elsewhere. Grades: A 90+, B 75+, C 55+, D 35+, F below.
+The score starts at 100 and loses points per finding. Grades: A 90+, B 75+, C 55+, D 35+, F below.
 
 ## Usage
 
@@ -133,22 +140,36 @@ keypeek --fail-on high                      # use as a pre-flight check or in CI
    { "permissions": { "deny": ["Read(./.env)", "Read(./.env.*)"] } }
    ```
    A deny rule is not a full barrier: shell commands can still read the file. Keep real secrets out of the project folder where you can.
-4. Clear old transcripts you no longer need, and rerun keypeek to confirm.
+4. Clear old transcripts you no longer need, and run keypeek again to confirm.
 
 Check your agent's current docs for exact permission syntax, and for subprocess environment scrubbing options (third-party posts mention a `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` setting; keypeek reports whether it is set but has not verified its behavior).
+
+## Trust: verify it yourself
+
+The tool is small on purpose (about 430 lines of TypeScript, zero runtime dependencies), so you can check the promises instead of taking our word for it.
+
+- **Read-only:** a test compares file modification times before and after a scan.
+- **No full secrets in output:** a test scans both the text and JSON output for the full value.
+- **No network, no writes, no spawned processes:** run this in a clone. It should print nothing.
+
+  ```
+  grep -rE "node:(http|https|http2|net|tls|dns|dgram|child_process)|fetch\(|writeFile|appendFile|createWriteStream" src
+  ```
+- Symlinks are not followed, so a scan cannot wander outside the folders it was given.
+- Unreadable files are skipped silently; files over 50MB are skipped and listed.
+
+Found a way it breaks these promises? See the [security policy](SECURITY.md).
+
+## Who it's for
+
+- **Vibe coders and solo builders** who let Claude Code, Cursor or Codex run in their projects and want to know what those tools can reach.
+- **Developers with a messy home folder:** old `.env` files, keys pasted into shell history, keys pasted into chats.
+- **Small teams and agencies** that want a quick check before handing a laptop or repo to an AI agent.
 
 ## How it differs from other tools
 
 - **gitleaks, trufflehog, GitGuardian** find secrets in repositories and can be pointed at any folder. They do not know where AI agents keep transcripts, do not rank by how exposed a secret is to an agent, and do not check agent settings. keypeek is narrower on purpose.
 - **Secrets managers and proxies** (1Password CLI, Doppler, Infisical, OneCLI) prevent the problem by keeping secrets out of the agent's reach. keypeek tells you whether you have the problem today. They work well together: audit, fix, audit again.
-
-## Privacy and safety
-
-- Read-only: enforced by a test that checks file modification times before and after a scan.
-- No network: there is no HTTP code in the package. Read `src/`; it is small.
-- No full secrets in output: enforced by a test over both text and JSON output.
-- Symlinks are not followed, so a scan cannot wander outside the folders it was given.
-- Unreadable files are skipped silently; files over 50MB are skipped and listed.
 
 ## FAQ
 
@@ -166,31 +187,25 @@ Check your agent's current docs for exact permission syntax, and for subprocess 
 
 ## Known limits
 
-- Pattern-based. Expect some misses (new key formats) and a few false positives (high-entropy values that are not secrets).
+- Pattern-based. Expect some misses (new key formats) and a few false positives (high-entropy values that are not secrets). Help us with [more key formats](https://github.com/Evalogical-Inc/keypeek/issues/14).
 - Transcripts are scanned as plain text lines because agent file formats change between versions. Cursor's SQLite chat store is not scanned.
 - `.env` files inside dot-directories are not scanned.
 - The config checks report whether a setting exists, not whether it fully protects you.
 - macOS and Linux. Windows is untested.
 
-## Docs
+## Roadmap
 
-- [Roadmap](ROADMAP.md)
-- [Runbook](docs/RUNBOOK.md): maintainer steps (add patterns, triage, release)
-- [Changelog](CHANGELOG.md)
-- [Contributing](CONTRIBUTING.md)
-- [Security policy](SECURITY.md)
+Ideas live as [GitHub issues](https://github.com/Evalogical-Inc/keypeek/issues?q=is%3Aissue+label%3Aroadmap), summarized in [ROADMAP.md](ROADMAP.md): a landing page, a Claude Code plugin, a shareable grade badge, a GitHub Action, an opt-in fix mode, Windows support. Questions and ideas are welcome in [Discussions](https://github.com/Evalogical-Inc/keypeek/discussions).
 
-## Develop
+## Contributing and docs
+
+- [Contributing](CONTRIBUTING.md) · [Runbook](docs/RUNBOOK.md) (add patterns, triage, release) · [Changelog](CHANGELOG.md) · [Security policy](SECURITY.md) · [Code of conduct](CODE_OF_CONDUCT.md)
 
 ```
 npm install
 npm test          # compiles, then runs node:test
 node dist/src/cli.js
 ```
-
-## Roadmap
-
-Only if people use it: a fix mode (deny rules, keychain migration), a shareable report, a GitHub Action, a team tier. Ideas and false-positive reports are welcome as issues.
 
 ## License
 
