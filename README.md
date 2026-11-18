@@ -4,6 +4,9 @@
 
 **See which secrets your AI coding agents can read.** One command, a few seconds, nothing changed, nothing shown.
 
+**Website:** [keypeek.vercel.app](https://keypeek.vercel.app)
+
+[![website](https://img.shields.io/badge/website-keypeek.vercel.app-f4ac24)](https://keypeek.vercel.app)
 [![ci](https://github.com/Evalogical-Inc/keypeek/actions/workflows/ci.yml/badge.svg)](https://github.com/Evalogical-Inc/keypeek/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@evalogical/keypeek)](https://www.npmjs.com/package/@evalogical/keypeek)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)

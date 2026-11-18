@@ -38,7 +38,7 @@
     "type": "git",
     "url": "git+https://github.com/Evalogical-Inc/keypeek.git"
   },
-  "homepage": "https://github.com/Evalogical-Inc/keypeek#readme",
+  "homepage": "https://keypeek.vercel.app",
   "bugs": {
     "url": "https://github.com/Evalogical-Inc/keypeek/issues"
   },
