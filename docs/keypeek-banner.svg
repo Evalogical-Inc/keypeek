@@ -8,18 +8,16 @@
     </linearGradient>
   </defs>
   <rect width="1200" height="320" rx="20" fill="url(#bg)"/>
-  <!-- key icon -->
-  <g transform="translate(96 96)" fill="none" stroke="#fbbf24" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="48" cy="48" r="36"/>
-    <path d="M82 74 L150 142 M122 114 L142 94 M138 130 L158 110"/>
+  <!-- logo mark (same as docs/logo/keypeek-mark-dark.svg), scaled -->
+  <g transform="translate(70 50) scale(0.84)" fill="none">
+    <circle cx="92" cy="128" r="54" stroke="#fbbf24" stroke-width="14"/>
+    <path d="M56 128 Q92 96 128 128 Q92 160 56 128Z" stroke="#a5b4fc" stroke-width="8" stroke-linejoin="round"/>
+    <circle cx="92" cy="128" r="9" fill="#a5b4fc"/>
+    <path d="M146 128 H222" stroke="#fbbf24" stroke-width="14" stroke-linecap="round"/>
+    <path d="M190 128 V160 M214 128 V152" stroke="#fbbf24" stroke-width="14" stroke-linecap="round"/>
   </g>
-  <!-- eye -->
-  <g transform="translate(246 70)" fill="none" stroke="#a5b4fc" stroke-width="5" stroke-linecap="round">
-    <path d="M0 18 Q22 -6 44 18 Q22 42 0 18 Z"/>
-    <circle cx="22" cy="18" r="6" fill="#a5b4fc"/>
-  </g>
-  <text x="300" y="150" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="84" font-weight="700" fill="#f8fafc">keypeek</text>
-  <text x="300" y="206" font-family="system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="30" fill="#cbd5e1">See which secrets your AI coding agents can read.</text>
-  <text x="300" y="256" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="24" fill="#fbbf24">npx @evalogical/keypeek</text>
-  <text x="300" y="292" font-family="system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="18" fill="#94a3b8">Read-only · no network · never prints a secret</text>
+  <text x="330" y="150" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="84" font-weight="700" fill="#f8fafc">keypeek</text>
+  <text x="330" y="206" font-family="system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="30" fill="#cbd5e1">See which secrets your AI coding agents can read.</text>
+  <text x="330" y="256" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="24" fill="#fbbf24">npx @evalogical/keypeek</text>
+  <text x="330" y="292" font-family="system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="18" fill="#94a3b8">Read-only · no network · never prints a secret</text>
 </svg>
