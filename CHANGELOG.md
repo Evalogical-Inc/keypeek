@@ -4,6 +4,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com). Versions follow s
 
 ## [Unreleased]
 
+### Fixed
+- An unknown flag (for example a typo like `--verison`) now prints a one-line message and exits with code 2 instead of a raw error.
+
 ## [0.1.1] - 2026-11-18
 
 ### Added

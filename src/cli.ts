@@ -22,7 +22,9 @@ Usage: keypeek [options]
 const RANK: Record<Severity, number> = { low: 0, medium: 1, high: 2 };
 
 async function main(): Promise<number> {
-  const { values } = parseArgs({
+  let parsed;
+  try {
+    parsed = parseArgs({
     options: {
       path: { type: "string", multiple: true },
       "no-history": { type: "boolean" },
@@ -32,7 +34,12 @@ async function main(): Promise<number> {
       help: { type: "boolean", short: "h" },
       version: { type: "boolean", short: "v" },
     },
-  });
+    });
+  } catch (e) {
+    // Typo'd flags get a one-line message instead of a stack-style TypeError.
+    return console.error(`keypeek: ${(e as Error).message.split(". ")[0]}. Run keypeek --help for options.`), 2;
+  }
+  const { values } = parsed;
   if (values.help) return console.log(HELP), 0;
   // dist/src/cli.js -> package root is two levels up
   if (values.version) return console.log(JSON.parse(readFileSync(new URL("../../package.json", import.meta.url), "utf8")).version), 0;

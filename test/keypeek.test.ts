@@ -89,3 +89,10 @@ test("report fits the terminal width and keeps filenames visible", async () => {
   for (const line of text.split("\n")) assert.ok(line.length <= 100, `line too wide: ${line.length}`);
   assert.ok(text.includes("~/.zsh_history") && text.includes("Next steps"));
 });
+
+test("an unknown flag gives a one-line message and exit code 2", async () => {
+  const { spawnSync } = await import("node:child_process");
+  const r = spawnSync(process.execPath, [join(import.meta.dirname, "../src/cli.js"), "--verison"], { encoding: "utf8" });
+  assert.equal(r.status, 2);
+  assert.ok(/Unknown option '--verison'/.test(r.stderr) && r.stderr.trim().split("\n").length === 1, r.stderr);
+});
