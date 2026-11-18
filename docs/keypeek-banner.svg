@@ -8,14 +8,8 @@
     </linearGradient>
   </defs>
   <rect width="1200" height="320" rx="20" fill="url(#bg)"/>
-  <!-- logo mark (same as docs/logo/keypeek-mark-dark.svg), scaled -->
-  <g transform="translate(70 50) scale(0.84)" fill="none">
-    <circle cx="92" cy="128" r="54" stroke="#fbbf24" stroke-width="14"/>
-    <path d="M56 128 Q92 96 128 128 Q92 160 56 128Z" stroke="#a5b4fc" stroke-width="8" stroke-linejoin="round"/>
-    <circle cx="92" cy="128" r="9" fill="#a5b4fc"/>
-    <path d="M146 128 H222" stroke="#fbbf24" stroke-width="14" stroke-linecap="round"/>
-    <path d="M190 128 V160 M214 128 V152" stroke="#fbbf24" stroke-width="14" stroke-linecap="round"/>
-  </g>
+  <!-- logo (same shapes as docs/logo/keypeek-key.svg), scaled -->
+  <g transform="translate(21 10.6) scale(0.146)"><rect x="900" y="966" width="943" height="116" rx="58" fill="#f4ac24"/><rect x="1364" y="1000" width="113" height="231" rx="56.5" fill="#f4ac24"/><rect x="1595" y="1000" width="113" height="279" rx="56.5" fill="#f4ac24"/><circle cx="608" cy="1024" r="409" fill="#f4ac24"/><path d="M319 1024 Q608 680 897 1024 Q608 1368 319 1024Z" fill="#9cacf8"/><circle cx="604" cy="1023" r="120" fill="#101c34"/><circle cx="662" cy="965" r="44" fill="#9cacf8"/></g>
   <text x="330" y="150" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="84" font-weight="700" fill="#f8fafc">keypeek</text>
   <text x="330" y="206" font-family="system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="30" fill="#cbd5e1">See which secrets your AI coding agents can read.</text>
   <text x="330" y="256" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="24" fill="#fbbf24">npx @evalogical/keypeek</text>
