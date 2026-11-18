@@ -4,14 +4,22 @@ Format follows [Keep a Changelog](https://keepachangelog.com). Versions follow s
 
 ## [Unreleased]
 
-### Added
-- `--version` and `--all` flags.
-- Terminal report: score bar, severity summary, aligned columns, `~` paths, width-aware truncation, per-section row cap and next steps.
-- Runbook, contributing guide, security policy, CI on Ubuntu and macOS (Node 20 and 22).
+## [0.1.1] - 2026-11-18
 
-### Fixed
-- Test script now works on Node 20 (shell expands the test glob).
+### Added
+- Scanning status line on terminals, so a slow scan on a large home folder no longer looks frozen. It goes to stderr and only on a terminal, so `--json` and piped output are unchanged.
+
+### Changed
+- README rewritten around the story, with how-it-works, a verify-it-yourself section, comparison and FAQ.
+- New logo and banner.
 
 ## [0.1.0] - 2026-11-17
 
-First version. Read-only audit of agent transcripts, shell history, `.env` files and process environment, with a per-surface score, `--json` and `--fail-on`.
+First version. Read-only audit of agent transcripts, shell history, `.env` files and process environment.
+
+### Added
+- 0-100 score and grade, capped per surface.
+- Terminal report with score bar, severity summary, aligned columns, `~` paths, width-aware truncation, per-section row cap and next steps.
+- `--json`, `--all`, `--path`, `--no-history`, `--fail-on`, `--version`.
+- Never prints a full secret, no network, zero runtime dependencies.
+- Runbook, contributing guide, security policy, CI on Ubuntu and macOS (Node 20 and 22).
