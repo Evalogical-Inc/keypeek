@@ -4,6 +4,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com). Versions follow s
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-11-19
+
+### Added
+- Claude Code plugin: a `keypeek` skill and a `/keypeek:audit` command (install with `/plugin marketplace add Evalogical-Inc/keypeek`). The plugin files live in the repository and are not part of the npm package.
+- Website link in the package metadata and README.
+
 ### Fixed
 - An unknown flag (for example a typo like `--verison`) now prints a one-line message and exits with code 2 instead of a raw error.
 
