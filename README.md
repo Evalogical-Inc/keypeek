@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/Evalogical-Inc/keypeek/main/docs/keypeek-banner.svg?v=3" alt="keypeek: see which secrets your AI coding agents can read" width="900"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/Evalogical-Inc/keypeek/main/docs/keypeek-banner.svg?v=4" alt="keypeek: see which secrets your AI coding agents can read" width="900"></p>
 
 <!-- mcp-name: io.github.Evalogical-Inc/keypeek -->
 # keypeek
