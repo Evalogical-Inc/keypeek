@@ -1,0 +1,11 @@
+{
+  "name": "keypeek",
+  "owner": { "name": "Evalogical" },
+  "plugins": [
+    {
+      "name": "keypeek",
+      "source": "./",
+      "description": "Read-only audit of which secrets your AI coding agents can read."
+    }
+  ]
+}

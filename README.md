@@ -134,6 +134,17 @@ keypeek --fail-on high                      # use as a pre-flight check or in CI
 
 `--json` returns `{ findings, checks, skipped, score, grade }`. Each finding has `provider`, `surface`, `severity`, `file`, `line`, `preview`, `fp` and `count`. There is no field that holds a full secret.
 
+## Use it from Claude Code
+
+keypeek ships a Claude Code plugin: a skill that runs the audit when you ask whether your keys are exposed, and a `/keypeek:audit` command.
+
+```
+/plugin marketplace add Evalogical-Inc/keypeek
+/plugin install keypeek@keypeek
+```
+
+It runs the same read-only CLI through `npx`, tells Claude not to open flagged files, and never changes anything without asking. Note that the report lists where your secrets live (paths and 4-character previews, never values), so it enters the chat; run it when you want the audit, not on every session.
+
 ## If keypeek finds something
 
 1. **Rotate it first.** Anything in a transcript or history has already been in a model's context or on disk in plaintext. Treat it as exposed.
