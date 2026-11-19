@@ -1,6 +1,6 @@
 {
   "name": "keypeek",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "https://keypeek.vercel.app",
   "description": "Read-only audit of which secrets your AI coding agents can read: .env files, shell history, agent transcripts and process environment.",
   "author": { "name": "Evalogical" },

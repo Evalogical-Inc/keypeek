@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Evalogical-Inc/keypeek",
+  "title": "keypeek",
+  "description": "Read-only audit of which secrets AI coding agents can read. Counts only by default; never returns values.",
+  "repository": {
+    "url": "https://github.com/Evalogical-Inc/keypeek",
+    "source": "github"
+  },
+  "websiteUrl": "https://keypeek.vercel.app",
+  "version": "0.2.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@evalogical/keypeek",
+      "version": "0.2.1",
+      "runtimeHint": "npx",
+      "transport": { "type": "stdio" },
+      "packageArguments": [{ "type": "positional", "value": "mcp" }]
+    }
+  ]
+}

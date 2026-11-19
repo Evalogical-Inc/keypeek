@@ -4,6 +4,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com). Versions follow s
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-19
+
+### Added
+- Listing metadata for the MCP registry (`mcpName` in package.json, `server.json`).
+- The Claude Code plugin now also registers the `keypeek mcp` server (`.mcp.json`).
+
 ## [0.2.0] - 2026-11-19
 
 ### Added

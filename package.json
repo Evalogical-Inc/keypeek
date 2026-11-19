@@ -1,6 +1,6 @@
 {
   "name": "@evalogical/keypeek",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "See which secrets your AI coding agents can read. Read-only, local, no network.",
   "type": "module",
   "bin": {
@@ -39,6 +39,7 @@
     "url": "git+https://github.com/Evalogical-Inc/keypeek.git"
   },
   "homepage": "https://keypeek.vercel.app",
+  "mcpName": "io.github.Evalogical-Inc/keypeek",
   "bugs": {
     "url": "https://github.com/Evalogical-Inc/keypeek/issues"
   },

@@ -11,7 +11,7 @@ Note: the report says where your secrets live (provider, surface, file path), an
 /plugin install keypeek@keypeek
 ```
 
-Adds a skill and `/keypeek:audit`.
+Adds a skill, `/keypeek:audit` and the MCP server below (counts only by default).
 
 ## Any MCP client (Codex, Cursor, Gemini CLI, ...)
 
