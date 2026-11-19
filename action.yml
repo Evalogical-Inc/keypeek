@@ -1,0 +1,31 @@
+name: keypeek
+description: Read-only check that fails the job when secrets are lying around in a checkout (.env files with real keys). No network, never prints a secret.
+branding:
+  icon: eye
+  color: yellow
+inputs:
+  path:
+    description: Directory to scan for .env files, relative to the workspace.
+    default: "."
+  fail-on:
+    description: Fail the job if a finding at this severity or above exists (low, medium or high). A key in a .env file is medium.
+    default: medium
+  version:
+    description: keypeek version to run (for example 0.2.1). Empty means latest.
+    default: ""
+runs:
+  using: composite
+  steps:
+    # Inputs go through env vars, never interpolated into the script, to avoid shell injection.
+    - shell: bash
+      env:
+        KP_PATH: ${{ inputs.path }}
+        KP_FAIL_ON: ${{ inputs.fail-on }}
+        KP_VERSION: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+        # env -i: the job's own secrets are in this process environment, and a CI run has no agent
+        # transcripts or shell history. Scan only the files in the checkout.
+        env -i PATH="$PATH" HOME="$HOME" \
+          npx --yes "@evalogical/keypeek@${KP_VERSION:-latest}" \
+          --path "$KP_PATH" --no-history --fail-on "$KP_FAIL_ON"

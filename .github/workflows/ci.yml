@@ -19,3 +19,25 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm ci
       - run: npm test
+  action:
+    # Runs the action in this repo against a fixture with a fake key, and against a clean folder.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build fixtures (the fake key is assembled at runtime so no secret-looking literal is committed)
+        run: |
+          mkdir -p "$RUNNER_TEMP/bad" "$RUNNER_TEMP/clean"
+          body="aB3dE5fG7hJ9kL1mN3pQ5rS7tU9vW1xY"
+          printf 'OPENAI_API_KEY=%s\n' "sk-${body}Zz" > "$RUNNER_TEMP/bad/.env"
+          printf 'PORT=3000\n' > "$RUNNER_TEMP/clean/.env"
+      - id: bad
+        uses: ./
+        continue-on-error: true
+        with:
+          path: ${{ runner.temp }}/bad
+      - id: clean
+        uses: ./
+        with:
+          path: ${{ runner.temp }}/clean
+      - name: The key must fail the job, the clean folder must not
+        run: test "${{ steps.bad.outcome }}" = failure && test "${{ steps.clean.outcome }}" = success
