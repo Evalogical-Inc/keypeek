@@ -4,6 +4,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com). Versions follow s
 
 ## [Unreleased]
 
+### Added
+- `keypeek mcp`: a read-only MCP server (stdio, no dependencies) with one tool, `audit_secret_exposure`. Counts only by default; file paths with `details: true`; never values, previews or fingerprints.
+- `docs/agents.md`: setup for Codex, other MCP clients and an `AGENTS.md` snippet.
+
 ### Fixed
 - An unknown flag (for example a typo like `--verison`) now prints a one-line message and exits with code 2 instead of a raw error.
 
