@@ -18,11 +18,7 @@
 npx @evalogical/keypeek
 ```
 
-<!-- DEMO GIF GOES HERE.
-     Record: scripts/demo-home.sh /tmp/keypeek-demo-home && npm run build && KEYPEEK_REPO=$PWD vhs docs/demo.tape
-     Then replace this whole comment with:
-<p align="center"><img src="https://raw.githubusercontent.com/Evalogical-Inc/keypeek/main/docs/keypeek-demo.gif" alt="keypeek scanning a demo home folder" width="800"></p>
--->
+<p align="center"><img src="https://raw.githubusercontent.com/Evalogical-Inc/keypeek/main/docs/keypeek-demo.gif" alt="keypeek scanning a demo home folder with fake keys: score 40 out of 100, grade D" width="800"></p>
 
 ## Why keypeek exists
 
