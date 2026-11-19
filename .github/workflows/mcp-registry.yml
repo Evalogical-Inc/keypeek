@@ -1,0 +1,17 @@
+name: Publish to MCP Registry
+# Manual only. Run it after the matching version is on npm: the registry checks that the
+# npm package exists and carries the same mcpName as server.json.
+on:
+  workflow_dispatch:
+
+jobs:
+  mcp-registry:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # registry OIDC login grants io.github.<repo owner>/*
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - run: curl -sSfL https://github.com/modelcontextprotocol/registry/releases/download/v1.8.1/mcp-publisher_linux_amd64.tar.gz | tar xz mcp-publisher
+      - run: ./mcp-publisher login github-oidc
+      - run: ./mcp-publisher publish
