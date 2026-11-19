@@ -1,6 +1,6 @@
 {
   "name": "@evalogical/keypeek",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "See which secrets your AI coding agents can read. Read-only, local, no network.",
   "type": "module",
   "bin": {
