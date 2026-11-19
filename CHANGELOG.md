@@ -4,6 +4,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com). Versions follow s
 
 ## [Unreleased]
 
+### Added
+- GitHub Action (`action.yml`): fails a job when a checkout contains a `.env` file with a real key. Inputs: `path`, `fail-on`, `version`. Not part of the npm package.
+
 ## [0.2.1] - 2026-11-19
 
 ### Added

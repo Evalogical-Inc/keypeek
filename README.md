@@ -154,6 +154,20 @@ args = ["-y", "@evalogical/keypeek", "mcp"]
 
 Agents without MCP can use an `AGENTS.md` snippet. Copy-paste setup for each is in [docs/agents.md](docs/agents.md).
 
+## Use it in CI
+
+A GitHub Action fails the job when a checkout contains a `.env` file with a real key. A CI runner has no agent transcripts or shell history, so it checks files only, and it ignores the job's own environment so it never flags the runner's secrets.
+
+```yaml
+- uses: actions/checkout@v4
+- uses: Evalogical-Inc/keypeek@v1
+  with:
+    path: .          # directory to scan (default: .)
+    fail-on: medium  # low, medium or high (default: medium; a key in a .env file is medium)
+```
+
+Use a Linux or macOS runner with Node 20 or later (GitHub's hosted runners have it). The report prints the 4-character preview and the file path into the job log, so keep that in mind for public repositories. Pin `version:` if you want a specific keypeek release.
+
 ## If keypeek finds something
 
 1. **Rotate it first.** Anything in a transcript or history has already been in a model's context or on disk in plaintext. Treat it as exposed.
