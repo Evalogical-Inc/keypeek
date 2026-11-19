@@ -96,3 +96,36 @@ test("an unknown flag gives a one-line message and exit code 2", async () => {
   assert.equal(r.status, 2);
   assert.ok(/Unknown option '--verison'/.test(r.stderr) && r.stderr.trim().split("\n").length === 1, r.stderr);
 });
+
+test("mcp server: lists one read-only tool, returns counts without secrets, paths only on request", async () => {
+  const { spawn } = await import("node:child_process");
+  const { home } = fixture();
+  const p = spawn(process.execPath, [join(import.meta.dirname, "../src/cli.js"), "mcp"], { env: { ...process.env, HOME: home, USERPROFILE: home }, cwd: home });
+  const lines: any[] = [];
+  let buf = "";
+  p.stdout.on("data", (d) => {
+    buf += d;
+    for (let i = buf.indexOf("\n"); i >= 0; i = buf.indexOf("\n")) (lines.push(JSON.parse(buf.slice(0, i))), (buf = buf.slice(i + 1)));
+  });
+  const send = (o: object) => p.stdin.write(JSON.stringify(o) + "\n");
+  const wait = async (n: number) => { for (let i = 0; i < 200 && lines.length < n; i++) await new Promise((r) => setTimeout(r, 50)); };
+  send({ jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-06-18" } });
+  send({ jsonrpc: "2.0", method: "notifications/initialized" }); // no reply expected
+  send({ jsonrpc: "2.0", id: 2, method: "tools/list" });
+  send({ jsonrpc: "2.0", id: 3, method: "tools/call", params: { name: "audit_secret_exposure", arguments: {} } });
+  send({ jsonrpc: "2.0", id: 4, method: "tools/call", params: { name: "audit_secret_exposure", arguments: { details: true, history: true } } });
+  send({ jsonrpc: "2.0", id: 5, method: "nope" });
+  await wait(5);
+  p.kill();
+  assert.equal(lines.length, 5);
+  assert.equal(lines[0].result.serverInfo.name, "keypeek");
+  assert.equal(lines[1].result.tools.length, 1);
+  assert.equal(lines[1].result.tools[0].annotations.readOnlyHint, true);
+  const counts = JSON.parse(lines[2].result.content[0].text);
+  assert.ok(counts.total >= 2 && !("findings" in counts));
+  const detailed = JSON.parse(lines[3].result.content[0].text);
+  assert.ok(detailed.findings.length === detailed.total && detailed.findings.every((f: any) => !("preview" in f) && !("fp" in f)));
+  assert.equal(lines[4].error.code, -32601);
+  const all = JSON.stringify(lines);
+  for (const secret of [ANT, OPENAI, AWS, body, "sk-a…"]) assert.ok(!all.includes(secret), "leaked a secret");
+});

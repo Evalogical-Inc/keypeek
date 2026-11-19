@@ -145,6 +145,18 @@ keypeek ships a Claude Code plugin: a skill that runs the audit when you ask whe
 
 It runs the same read-only CLI through `npx`, tells Claude not to open flagged files, and never changes anything without asking. Note that the report lists where your secrets live (paths and 4-character previews, never values), so it enters the chat; run it when you want the audit, not on every session.
 
+## Use it from other AI agents
+
+For Codex, Cursor, Gemini CLI and any MCP client, `keypeek mcp` runs a read-only MCP server with one tool. By default it returns only the score and counts per surface; file paths only when asked, and never values or previews (needs keypeek 0.2.0 or later). For Codex, add this to `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.keypeek]
+command = "npx"
+args = ["-y", "@evalogical/keypeek", "mcp"]
+```
+
+Agents without MCP can use an `AGENTS.md` snippet. Copy-paste setup for each is in [docs/agents.md](docs/agents.md).
+
 ## If keypeek finds something
 
 1. **Rotate it first.** Anything in a transcript or history has already been in a model's context or on disk in plaintext. Treat it as exposed.
