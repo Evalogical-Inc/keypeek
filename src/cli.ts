@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { parseArgs } from "node:util";
 import { runAudit } from "./audit.js";
+import { runGuard } from "./guard.js";
 import { serve } from "./mcp.js";
 import { renderReport } from "./report.js";
 import type { Severity } from "./types.js";
@@ -12,6 +13,7 @@ Read-only. No network. Secret values are never printed.
 
 Usage: keypeek [options]
        keypeek mcp         run as a read-only MCP server over stdio (counts only by default)
+       keypeek guard       Claude Code hook: reads one hook event on stdin, prints a decision
   --path <dir>        directory to scan for .env files (repeatable, default: home)
   --no-history        skip shell history files
   --all               show every finding (default: top rows per section)
@@ -25,6 +27,7 @@ const RANK: Record<Severity, number> = { low: 0, medium: 1, high: 2 };
 
 async function main(): Promise<number> {
   if (process.argv[2] === "mcp") return await serve(), 0;
+  if (process.argv[2] === "guard") return await runGuard(), 0;
   let parsed;
   try {
     parsed = parseArgs({
