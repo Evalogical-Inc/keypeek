@@ -142,6 +142,20 @@ keypeek ships a Claude Code plugin: a skill that runs the audit when you ask whe
 
 It runs the same read-only CLI through `npx`, tells Claude not to open flagged files, and never changes anything without asking. Note that the report lists where your secrets live (paths and 4-character previews, never values), so it enters the chat; run it when you want the audit, not on every session.
 
+### Live guard
+
+The plugin also turns on `keypeek guard`, a set of Claude Code hooks that act while the agent works, not after:
+
+| When | What it catches | What happens |
+|---|---|---|
+| Before a tool runs | `Read`, `Edit` or `Grep` on a `.env` file (not `.env.example`) or a shell history file; shell commands that read those files (`cat .env`, `source .env`), dump the environment (`env`, `printenv`, `export -p`) or print a secret-named variable (`echo $API_TOKEN`) | Claude Code asks you first. Using a variable without printing it (`curl -H "Bearer $API_KEY"`) is not flagged |
+| After a tool runs | A known key format in the tool's output | You get a warning to rotate the key; Claude is told not to repeat it |
+| When you send a message | A known key format in your prompt | The message is blocked before it reaches the model |
+
+Like the audit, the guard is read-only and offline: it looks only at the hook event Claude Code sends, never opens the files it names, and only ever shows a 4-character preview. If anything goes wrong it stays silent and lets the call through, so it cannot break a session. It runs the plugin's own built copy of keypeek when there is one, otherwise a global `keypeek` (`npm install -g @evalogical/keypeek`), otherwise `npx`.
+
+Limits: a script that loads `.env` itself (for example `dotenv` in `npm start`) is not seen before it runs; only its output is checked. Commands the agent starts still inherit your environment variables, so also set `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB`. A blocked prompt may still be kept in Claude Code's local prompt history. To turn the guard off, disable the keypeek plugin.
+
 ## Use it from other AI agents
 
 For Codex, Cursor, Gemini CLI and any MCP client, `keypeek mcp` runs a read-only MCP server with one tool. By default it returns only the score and counts per surface; file paths only when asked, and never values or previews (needs keypeek 0.2.0 or later). For Codex, add this to `~/.codex/config.toml`:

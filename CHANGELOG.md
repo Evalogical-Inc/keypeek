@@ -5,6 +5,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com). Versions follow s
 ## [Unreleased]
 
 ### Added
+- `keypeek guard`: Claude Code hook handler, registered by the plugin (`hooks/hooks.json`). Asks before an agent reads `.env` or shell history files, dumps the environment or prints a secret-named variable; warns when tool output contains a key; blocks prompts that contain a key. Read-only, offline, fails open, only redacted previews in its output.
 - GitHub Action (`action.yml`): fails a job when a checkout contains a `.env` file with a real key. Inputs: `path`, `fail-on`, `version`. Not part of the npm package.
 
 ## [0.2.1] - 2026-11-19

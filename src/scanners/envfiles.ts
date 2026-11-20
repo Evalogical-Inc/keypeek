@@ -2,8 +2,8 @@ import type { Collector } from "../collector.js";
 import { scanFile, walk } from "../scan.js";
 
 const SKIP = new Set(["node_modules", "Library", "Applications", "Movies", "Music", "Pictures", "venv", "dist", "build", "target", "vendor", "Pods"]);
-const ENV = /^\.env(\..+)?$/;
-const TEMPLATE = /\.(example|sample|template|dist)$/;
+export const ENV = /^\.env(\..+)?$/;
+export const TEMPLATE = /\.(example|sample|template|dist)$/;
 
 // Dot-directories are skipped (covers .git); .env files inside them are not scanned.
 export async function scanEnvFiles(roots: string[], c: Collector): Promise<void> {

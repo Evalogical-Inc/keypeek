@@ -29,3 +29,4 @@ Report by provider, surface and file path. Do not repeat `preview` values or `fp
 - keypeek is read-only, makes no network calls and never prints a full secret. Any fix (rotating a key, editing settings) is a separate action that needs the user's approval.
 - A key found in a transcript or history should be rotated, not just deleted. Say so.
 - A clean report does not prove nothing is exposed; it only covers the places keypeek checks.
+- The plugin's guard hooks may ask the user before you read a `.env` or history file, or tell you a tool output contained a key. Do not try to get around a guard prompt with another tool or command; explain why you need the file, and if a key leaked, never repeat it and tell the user to rotate it.
