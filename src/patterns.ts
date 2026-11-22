@@ -17,7 +17,7 @@ const PROVIDERS: [string, RegExp][] = [
 // A variable or setting name that suggests it holds a secret. Same words as the GENERIC rule.
 export const SECRET_NAME = /^[A-Z0-9_]*(?:KEY|TOKEN|SECRET|PASSWORD|PASSWD)[A-Z0-9_]*$/i;
 
-const GENERIC =/\b([A-Z0-9_]*(?:KEY|TOKEN|SECRET|PASSWORD|PASSWD)[A-Z0-9_]*)\s*[=:]\s*["']?([^\s"']{16,})/gi;
+const GENERIC = /\b([A-Z0-9_]*(?:KEY|TOKEN|SECRET|PASSWORD|PASSWD)[A-Z0-9_]*)\s*[=:]\s*["']?([^\s"']{16,})/gi;
 const PLACEHOLDER = /your|example|changeme|placeholder|xxxx|\*\*\*|^[$<{]/i;
 
 export function entropy(s: string): number {
