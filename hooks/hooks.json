@@ -1,0 +1,39 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Edit|MultiEdit|Grep|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "(if [ -f \"$CLAUDE_PLUGIN_ROOT/dist/src/cli.js\" ]; then node \"$CLAUDE_PLUGIN_ROOT/dist/src/cli.js\" guard; elif command -v keypeek >/dev/null 2>&1; then keypeek guard; else npx --yes @evalogical/keypeek guard; fi) 2>/dev/null; exit 0",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "(if [ -f \"$CLAUDE_PLUGIN_ROOT/dist/src/cli.js\" ]; then node \"$CLAUDE_PLUGIN_ROOT/dist/src/cli.js\" guard; elif command -v keypeek >/dev/null 2>&1; then keypeek guard; else npx --yes @evalogical/keypeek guard; fi) 2>/dev/null; exit 0",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "(if [ -f \"$CLAUDE_PLUGIN_ROOT/dist/src/cli.js\" ]; then node \"$CLAUDE_PLUGIN_ROOT/dist/src/cli.js\" guard; elif command -v keypeek >/dev/null 2>&1; then keypeek guard; else npx --yes @evalogical/keypeek guard; fi) 2>/dev/null; exit 0",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -129,3 +129,52 @@ test("mcp server: lists one read-only tool, returns counts without secrets, path
   const all = JSON.stringify(lines);
   for (const secret of [ANT, OPENAI, AWS, body, "sk-a…"]) assert.ok(!all.includes(secret), "leaked a secret");
 });
+
+test("guard asks before an agent reads .env or history files, and allows templates", async () => {
+  const { decide } = await import("../src/guard.js");
+  const pre = (tool_name: string, tool_input: object) => decide({ hook_event_name: "PreToolUse", tool_name, tool_input: tool_input as Record<string, unknown> });
+  const asks = (d: any) => d?.hookSpecificOutput?.permissionDecision === "ask";
+  assert.ok(asks(pre("Read", { file_path: "/home/u/proj/.env" })));
+  assert.ok(asks(pre("Read", { file_path: "/home/u/proj/.env.local" })));
+  assert.ok(asks(pre("Edit", { file_path: "/home/u/.zsh_history" })));
+  assert.ok(asks(pre("Grep", { pattern: "KEY", glob: "**/.env*" })));
+  assert.equal(pre("Read", { file_path: "/home/u/proj/.env.example" }), null);
+  assert.equal(pre("Read", { file_path: "/home/u/proj/src/env.ts" }), null);
+  assert.equal(pre("Write", { file_path: "/home/u/proj/.env" }), null);
+});
+
+test("guard asks before shell commands that print secrets, not ones that only use them", async () => {
+  const { checkBash } = await import("../src/guard.js");
+  for (const c of ["cat .env", "source ./.env && npm start", "grep KEY '.env.production'", "echo $(cat proj/.env)", "env", "env | grep KEY", "printenv", "printenv OPENAI_API_KEY", "echo $API_TOKEN", 'echo "${DB_PASSWORD}"', "export -p", "tail ~/.bash_history"]) {
+    assert.ok(checkBash(c), `should ask: ${c}`);
+  }
+  for (const c of ["ls -la", "npm test", 'curl -H "Authorization: Bearer $API_KEY" https://x', "env NODE_ENV=test node app.js", "export PATH=$PATH:/x", "cat .env.example", "printenv HOME", "echo $HOME"]) {
+    assert.equal(checkBash(c), null, `should allow: ${c}`);
+  }
+});
+
+test("guard warns when tool output contains a key and blocks prompts with keys, never echoing them", async () => {
+  const { decide } = await import("../src/guard.js");
+  const post: any = decide({ hook_event_name: "PostToolUse", tool_name: "Bash", tool_response: { stdout: `ok\n${ANT}\n`, stderr: "" } });
+  assert.ok(post.systemMessage.includes("Anthropic") && post.hookSpecificOutput.additionalContext.includes("rotate"));
+  assert.equal(decide({ hook_event_name: "PostToolUse", tool_name: "Bash", tool_response: { stdout: "all good" } }), null);
+  const prompt: any = decide({ hook_event_name: "UserPromptSubmit", prompt: `use this key ${OPENAI} and ${AWS}` });
+  assert.equal(prompt.decision, "block");
+  assert.ok(prompt.reason.includes("2 keys"));
+  assert.equal(decide({ hook_event_name: "UserPromptSubmit", prompt: "set OPENAI_API_KEY in .env please" }), null);
+  const all = JSON.stringify([post, prompt]);
+  for (const secret of [ANT, OPENAI, AWS, body]) assert.ok(!all.includes(secret), "leaked a secret");
+});
+
+test("guard CLI reads one event from stdin and fails open on bad input", async () => {
+  const { spawnSync } = await import("node:child_process");
+  const cli = join(import.meta.dirname, "../src/cli.js");
+  const run = (input: string) => spawnSync(process.execPath, [cli, "guard"], { input, encoding: "utf8" });
+  const ok = run(JSON.stringify({ hook_event_name: "PreToolUse", tool_name: "Read", tool_input: { file_path: "/x/.env" } }));
+  assert.equal(ok.status, 0);
+  assert.equal(JSON.parse(ok.stdout).hookSpecificOutput.permissionDecision, "ask");
+  const bad = run("not json");
+  assert.equal(bad.status, 0);
+  assert.equal(bad.stdout, "");
+  assert.equal(run(JSON.stringify({ hook_event_name: "Stop" })).stdout, "");
+});
