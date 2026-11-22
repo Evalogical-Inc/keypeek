@@ -140,7 +140,7 @@ keypeek ships a Claude Code plugin: a skill that runs the audit when you ask whe
 /plugin install keypeek@keypeek
 ```
 
-It runs the same read-only CLI through `npx`, tells Claude not to open flagged files, and never changes anything without asking. Note that the report lists where your secrets live (paths and 4-character previews, never values), so it enters the chat; run it when you want the audit, not on every session.
+It runs the same read-only CLI through `npx`, tells Claude not to open flagged files, and never changes anything without asking. Note that the report lists where your secrets live (paths and 4-character previews, never values), so it enters the chat; run the audit when you want it. The live guard below is separate and runs on every session.
 
 ### Live guard
 
