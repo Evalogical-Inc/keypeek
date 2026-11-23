@@ -1,6 +1,6 @@
 # Roadmap
 
-keypeek is small on purpose. Ideas are tracked as GitHub issues labelled [`roadmap`](https://github.com/Evalogical-Inc/keypeek/issues?q=is%3Aissue+label%3Aroadmap). Vote with a thumbs-up on the ones you want, or open a [discussion](https://github.com/Evalogical-Inc/keypeek/discussions) for a new idea.
+keypeek is small on purpose. The timeline lives in the [roadmap project](https://github.com/orgs/Evalogical-Inc/projects/5); this file is the summary. Ideas are tracked as GitHub issues labelled [`roadmap`](https://github.com/Evalogical-Inc/keypeek/issues?q=is%3Aissue+label%3Aroadmap). Vote with a thumbs-up on the ones you want, or open a [discussion](https://github.com/Evalogical-Inc/keypeek/discussions) for a new idea.
 
 ## Where it is going
 keypeek started as an audit of which secrets AI coding agents can read. The direction is a security layer for AI-assisted development: find what is exposed, warn while the agent works, and check again automatically.
